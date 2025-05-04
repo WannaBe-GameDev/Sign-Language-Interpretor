@@ -1,0 +1,45 @@
+import os
+
+# Define the mapping for the class numbers
+class_mapping = {
+    15: 0,
+    16: 1,
+    17: 2,
+    18: 3,
+    19: 4,
+    20: 5
+}
+
+# Function to process a label file
+def process_label_file(input_file_path, output_file_path):
+    with open(input_file_path, 'r') as file:
+        lines = file.readlines()
+    
+    with open(output_file_path, 'w') as file:
+        for line in lines:
+            parts = line.strip().split()
+            class_id = int(parts[0])
+            
+            # Check if the class_id is in the mapping
+            if class_id in class_mapping:
+                parts[0] = str(class_mapping[class_id])
+            
+            # Write the updated line back to the output file
+            file.write(' '.join(parts) + '\n')
+
+# Function to process all label files in a directory
+def process_all_labels_in_directory(input_dir, output_dir):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    for filename in os.listdir(input_dir):
+        if filename.endswith(".txt"):  # Assuming label files are .txt
+            input_file_path = os.path.join(input_dir, filename)
+            output_file_path = os.path.join(output_dir, filename)
+            process_label_file(input_file_path, output_file_path)
+            print(f"Processed {filename}")
+
+# Example usage
+input_dir = 'C:\Users\HP\Desktop\SLI\Sign-Language-Generation-From-Video-using-YOLOV5\Labels'
+output_dir = 'C:\Users\HP\Desktop\SLI\Sign-Language-Generation-From-Video-using-YOLOV5\Fixed Labels'
+process_all_labels_in_directory(input_dir, output_dir)
